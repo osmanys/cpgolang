@@ -27,7 +27,7 @@ func TestINTXOR(t *testing.T) {
 			}
 		}
 		if i < n {
-			t.Errorf("Wrong answer n: %d | i: %d", n, i)
+			t.Errorf("Wrong answer %d | %d", n, i)
 		}
 	}
 }

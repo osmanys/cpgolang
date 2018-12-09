@@ -44,63 +44,43 @@ func printf(f string, a ...interface{}) { fmt.Fprintf(writer, f, a...) }
 func print(a ...interface{})            { fmt.Fprint(writer, a...) }
 
 func main() {
-	/*defer writer.Flush()
+	Solve(func() int {
+		return nextInt()
+	}, func(s string) {
+		defer writer.Flush()
+		print(s)
+	})
+}
 
-	var n, m int
-	var grade []int
-	t := nextInt()
-	for ; t > 0; t-- {
-		n = nextInt()
-		m = nextInt()
-		grade = make([]int, n)
-		for i := 0; i < m; i++ {
+// Solve function
+func Solve(scan func() int, print func(string)) {
+	n := scan()
+	scan()
 
+	start := 1
+	end := n
+	var step, r, i int
+	for start < end {
+		if (end-start)/10 == 0 {
+			step = 1
+		} else {
+			step = (end - start) / 10
 		}
-	}*/
-}
-
-//Solve function
-func Solve() {
-
-}
-
-// Graph struct
-type Graph struct {
-	V   int
-	adj [][]int
-}
-
-// NewGraph function
-func NewGraph(v int) *Graph {
-	return &Graph{v, make([][]int, v)}
-}
-
-// AddEdge function
-func (g *Graph) AddEdge(v int, w int) {
-	g.adj[v] = append(g.adj[v], w)
-}
-
-func (g *Graph) dfsUtil(v int, visited []bool) {
-	visited[v] = true
-
-	//code here
-	fmt.Printf("%d ", v)
-
-	for _, n := range g.adj[v] {
-		if !visited[n] {
-			g.dfsUtil(n, visited)
+		for i = 1; start+i*step <= end; i++ {
+			print(fmt.Sprintf("1 %d\n", start+i*step))
+			r = scan()
+			if r == 1 {
+				print("2\n")
+				break
+			} else if r == -1 {
+				return
+			}
 		}
+		if start+i*step <= end {
+			end = start + i*step - 1
+		}
+		start = start + (i-1)*step
 	}
-}
 
-// DFS traversal of the vertices reachable from v.
-// It uses recursive DFSUtil()
-func (g *Graph) DFS() {
-	visited := make([]bool, g.V)
-
-	for i := 0; i < g.V; i++ {
-		if !visited[i] {
-			g.dfsUtil(i, visited)
-		}
-	}
+	print(fmt.Sprintf("3 %d\n", start))
 }

@@ -44,63 +44,41 @@ func printf(f string, a ...interface{}) { fmt.Fprintf(writer, f, a...) }
 func print(a ...interface{})            { fmt.Fprint(writer, a...) }
 
 func main() {
-	/*defer writer.Flush()
-
-	var n, m int
-	var grade []int
 	t := nextInt()
+	var n int
+	var r []int
 	for ; t > 0; t-- {
 		n = nextInt()
-		m = nextInt()
-		grade = make([]int, n)
-		for i := 0; i < m; i++ {
-
-		}
-	}*/
-}
-
-//Solve function
-func Solve() {
-
-}
-
-// Graph struct
-type Graph struct {
-	V   int
-	adj [][]int
-}
-
-// NewGraph function
-func NewGraph(v int) *Graph {
-	return &Graph{v, make([][]int, v)}
-}
-
-// AddEdge function
-func (g *Graph) AddEdge(v int, w int) {
-	g.adj[v] = append(g.adj[v], w)
-}
-
-func (g *Graph) dfsUtil(v int, visited []bool) {
-	visited[v] = true
-
-	//code here
-	fmt.Printf("%d ", v)
-
-	for _, n := range g.adj[v] {
-		if !visited[n] {
-			g.dfsUtil(n, visited)
+		r = Solve(n, func(a int, b int, c int) int {
+			printf("1 %d %d %d\n", a, b, c)
+			writer.Flush()
+			return nextInt()
+		})
+		print(1)
+		for _, v := range r {
+			printf(" %d", v)
 		}
 	}
 }
 
-// DFS traversal of the vertices reachable from v.
-// It uses recursive DFSUtil()
-func (g *Graph) DFS() {
-	visited := make([]bool, g.V)
+// Solve function
+func Solve(n int, eval func(int, int, int) int) []int {
+	r := make([]int, n)
+	var x1, x2, x3, x4 int
+	i := 0
+	for ; i < n/4; i++ {
+		x1 = eval(4*i+2, 4*i+3, 4*i+4)
+		x2 = eval(4*i+1, 4*i+3, 4*i+4)
+		x3 = eval(4*i+1, 4*i+2, 4*i+4)
+		x4 = eval(4*i+1, 4*i+2, 4*i+3)
 
-	for i := 0; i < g.V; i++ {
-		if !visited[i] {
-			g.dfsUtil(i, visited)
-		}
+		r[4*i] = x2 ^ x3 ^ x4
+		r[4*i+1] = x1 ^ x3 ^ x4
+		r[4*i+2] = x1 ^ x2 ^ x4
+		r[4*i+3] = x1 ^ x2 ^ x3
 	}
+	for i := 4 * i; i < n; i++ {
+		r[i] = eval(1, 2, i+1) ^ r[0] ^ r[1]
+	}
+	return r
 }

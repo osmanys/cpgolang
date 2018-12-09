@@ -54,10 +54,13 @@ func main() {
 			writer.Flush()
 			return nextInt()
 		})
-		print(1)
+		print(2)
 		for _, v := range r {
 			printf(" %d", v)
 		}
+		print("\n")
+		writer.Flush()
+		nextInt()
 	}
 }
 
