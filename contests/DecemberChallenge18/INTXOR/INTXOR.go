@@ -67,21 +67,66 @@ func main() {
 // Solve function
 func Solve(n int, eval func(int, int, int) int) []int {
 	r := make([]int, n)
-	var x1, x2, x3, x4 int
 	i := 0
-	for ; i < n/4; i++ {
-		x1 = eval(4*i+2, 4*i+3, 4*i+4)
-		x2 = eval(4*i+1, 4*i+3, 4*i+4)
-		x3 = eval(4*i+1, 4*i+2, 4*i+4)
-		x4 = eval(4*i+1, 4*i+2, 4*i+3)
-
-		r[4*i] = x2 ^ x3 ^ x4
-		r[4*i+1] = x1 ^ x3 ^ x4
-		r[4*i+2] = x1 ^ x2 ^ x4
-		r[4*i+3] = x1 ^ x2 ^ x3
+	for ; i < n/4-2; i++ {
+		calc4(4*i, eval, r)
 	}
-	for i := 4 * i; i < n; i++ {
-		r[i] = eval(1, 2, i+1) ^ r[0] ^ r[1]
+	switch n % 4 {
+	case 0:
+		calc4(4*i, eval, r)
+		calc4(4*i+4, eval, r)
+	case 1:
+		calc4(4*i, eval, r)
+		calc5(4*i+4, eval, r)
+	case 2:
+		calc5(4*i, eval, r)
+		calc5(4*i+5, eval, r)
+	case 3:
+		calc5(4*i, eval, r)
+		calc6(4*i+5, eval, r)
 	}
 	return r
+}
+
+func calc4(i int, eval func(int, int, int) int, r []int) {
+	var x1, x2, x3, x4 int
+	x1 = eval(i+2, i+3, i+4)
+	x2 = eval(i+1, i+3, i+4)
+	x3 = eval(i+1, i+2, i+4)
+	x4 = eval(i+1, i+2, i+3)
+
+	r[i] = x2 ^ x3 ^ x4
+	r[i+1] = x1 ^ x3 ^ x4
+	r[i+2] = x1 ^ x2 ^ x4
+	r[i+3] = x1 ^ x2 ^ x3
+}
+
+func calc5(i int, eval func(int, int, int) int, r []int) {
+	x1 := eval(i+1, i+2, i+3)
+	x2 := eval(i+2, i+3, i+4)
+	x3 := eval(i+3, i+4, i+5)
+	x4 := eval(i+1, i+4, i+5)
+	x5 := eval(i+1, i+2, i+5)
+
+	r[i] = x2 ^ x3 ^ x5
+	r[i+1] = x1 ^ x3 ^ x4
+	r[i+2] = x2 ^ x4 ^ x5
+	r[i+3] = x1 ^ x3 ^ x5
+	r[i+4] = x1 ^ x2 ^ x4
+}
+
+func calc6(i int, eval func(int, int, int) int, r []int) {
+	x1 := eval(i+1, i+2, i+3)
+	x2 := eval(i+3, i+4, i+5)
+	x3 := eval(i+1, i+5, i+6)
+	x4 := eval(i+3, i+4, i+6)
+	x5 := eval(i+2, i+5, i+6)
+	x6 := eval(i+1, i+2, i+4)
+
+	r[i] = x2 ^ x3 ^ x4
+	r[i+1] = x2 ^ x4 ^ x5
+	r[i+2] = x1 ^ x3 ^ x5
+	r[i+3] = x3 ^ x5 ^ x6
+	r[i+4] = x1 ^ x2 ^ x6
+	r[i+5] = x1 ^ x4 ^ x6
 }

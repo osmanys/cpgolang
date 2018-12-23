@@ -66,8 +66,8 @@ func Solve(scan func() int, print func(string)) {
 		} else {
 			step = (end - start) / 10
 		}
-		for i = 1; start+i*step <= end; i++ {
-			print(fmt.Sprintf("1 %d\n", start+i*step))
+		for i = start; i <= end; i += step {
+			print(fmt.Sprintf("1 %d\n", i))
 			r = scan()
 			if r == 1 {
 				print("2\n")
@@ -76,11 +76,13 @@ func Solve(scan func() int, print func(string)) {
 				return
 			}
 		}
-		if start+i*step <= end {
-			end = start + i*step - 1
+		if i < end {
+			end = i
 		}
-		start = start + (i-1)*step
+		if i > start {
+			start = i - step + 1
+		}
 	}
 
-	print(fmt.Sprintf("3 %d\n", start))
+	print(fmt.Sprintf("3 %d\n", end))
 }
