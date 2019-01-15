@@ -41,11 +41,9 @@ type Point struct {
 // ByPoint alias
 type ByPoint []Point
 
-func (a ByPoint) Len() int      { return len(a) }
-func (a ByPoint) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
-
-//func (a ByPoint) Less(i, j int) bool { return a[i].x < a[j].x || (a[i].x == a[j].x && a[i].y < a[j].y) }
-func (a ByPoint) Less(i, j int) bool { return a[i].x < a[j].x }
+func (a ByPoint) Len() int           { return len(a) }
+func (a ByPoint) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByPoint) Less(i, j int) bool { return a[i].x < a[j].x || (a[i].x == a[j].x && a[i].y < a[j].y) }
 
 // Solve func
 func Solve(points []Point) int {
